@@ -5,6 +5,7 @@ function ProductsList({ data }) {
     <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 mb:grid-cols-2 maw-w-5xl mx-auto px-8">
       {data &&
         data.products.map((texnika) => {
+          console.log(texnika);
           return (
             <li className="card  bg-base-100 shadow-xl " key={texnika.id}>
               {
@@ -23,21 +24,27 @@ function ProductsList({ data }) {
                     </h2>
                     <p className=" line-clamp-3">{texnika.description}</p>
                     <ul className="card-actions justify-between">
-                      <li className="badge badge-outline p-5">
+                      <li className="badge badge-outline  text-black  bg-green-500 p-5">
                         Price: {texnika.price}$
                       </li>
-                      <li className="badge badge-outline p-5">
+                      <li className="badge  bg-blue-700  text-black badge-outline p-5">
                         Rating:{texnika.rating}
                       </li>
-                      <li className="badge badge-outline p-5">
-                        Sale:{texnika.discountPercentage}%
+                      <li className="badge  bg-secondary  text-black badge-outline p-5">
+                        Stock:{texnika.stock}
+                      </li>
+                      <li className="badge  bg-accent text-black badge-outline p-5">
+                        Discount interest: {texnika.discountPercentage}
+                      </li>
+                      <li className="badge   bg-accent text-black badge-outline p-5">
+                        Id: {texnika.id}
                       </li>
                     </ul>
                     <Link
                       to={`/product/${texnika.id}`}
-                      className="btn btn-primary mt-5"
+                      className="btn  bg-orange-600 mt-5"
                     >
-                      Buy Now
+                      Purchase
                     </Link>
                   </div>
                 </>

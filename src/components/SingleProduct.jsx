@@ -28,6 +28,34 @@ function SingleProduct() {
             <h3 className="">Brand: {data.brand}</h3>
             <p>Description: {data.description}</p>
             <p className="  text-green-500 text-2xl">Price: {data.price}$</p>
+            <div className="rating">
+              <input
+                type="radio"
+                name="rating-2"
+                className="mask mask-star-2 bg-orange-400"
+              />
+              <input
+                type="radio"
+                name="rating-2"
+                className="mask mask-star-2 bg-orange-400"
+                checked
+              />
+              <input
+                type="radio"
+                name="rating-2"
+                className="mask mask-star-2 bg-orange-400"
+              />
+              <input
+                type="radio"
+                name="rating-2"
+                className="mask mask-star-2 bg-orange-400"
+              />
+              <input
+                type="radio"
+                name="rating-2"
+                className="mask mask-star-2 bg-orange-400"
+              />
+            </div>
           </div>
         </div>
       )}
