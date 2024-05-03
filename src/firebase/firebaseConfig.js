@@ -1,15 +1,19 @@
-import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-
+import { initializeApp } from "firebase/app";
+import { GoogleAuthProvider } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBcqAT7f-hjSuZtwC8vmbpEJgm0xljUQFQ",
-  authDomain: "mymarket-3f465.firebaseapp.com",
-  projectId: "mymarket-3f465",
-  storageBucket: "mymarket-3f465.appspot.com",
-  messagingSenderId: "546313030491",
-  appId: "1:546313030491:web:52e622409debea0470a87e",
+  apiKey: "AIzaSyBSxit_gvlXuPg0YQxHzE1sJcrk4n4a-vM",
+  authDomain: "mymarket-1977c.firebaseapp.com",
+  projectId: "mymarket-1977c",
+  storageBucket: "mymarket-1977c.appspot.com",
+  messagingSenderId: "214413288545",
+  appId: "1:214413288545:web:108d658ec09d7f16fb7620",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth();
+export const db = getFirestore(app);
+let auth = getAuth();
+export default auth;

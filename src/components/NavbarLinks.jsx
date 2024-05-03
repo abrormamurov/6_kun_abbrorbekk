@@ -18,6 +18,11 @@ function NavbarLinks() {
           Contact
         </Link>
       </li>
+      <li>
+        <Link className="" to="/card">
+          Card
+        </Link>
+      </li>
     </>
   );
 }

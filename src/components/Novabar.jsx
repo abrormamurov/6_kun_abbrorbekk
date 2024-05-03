@@ -1,25 +1,24 @@
 import { Link } from "react-router-dom";
 import NavbarLinks from "./NavbarLinks";
-import { useContext, useEffect, useState } from "react";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase/firebaseConfig";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
-// context
-import { createContext } from "react";
+//context
 import { GlobalContext } from "../context/useGlobal";
+import { useContext } from "react";
 
-let thems = {
-  light: "light",
-  dark: "dark",
-};
 let localStrog = () => {
   return localStorage.getItem("theme")
     ? localStorage.getItem("theme")
     : "light";
 };
 function Novabar() {
-  const { dispatch, user } = useContext(GlobalContext);
   let [theme, setTheme] = useState(localStrog());
+  let { dispetch, user } = useContext(GlobalContext);
+
+  // if (localStrog.user) {
+  //   let { dispetch, user } = useContext(GlobalContext);
+  // }
 
   const darkMode = (e) => {
     if (e.target.checked) {
@@ -34,21 +33,22 @@ function Novabar() {
     document.querySelector("html").setAttribute("data-theme", localTheme);
   }, [theme]);
 
-  const handleLogout = () => {
-    signOut(auth)
-      .then(() => {
-        dispatch({ type: "LOG_OUT" });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  let handleLogOut = () => {
+    dispetch({
+      type: "LOG_OUT",
+      pylod: null,
+    });
+
+    toast("Good Job!", {
+      icon: "👏",
+    });
   };
 
   return (
-    <ul className="navbar bg-base-300 maw-w-5xl mx-auto px-16 ">
+    <ul className="navbar bg-base-300 maw-w-5xl mx-auto px-8 ">
       <li className="navbar-start  ">
         <div className="btn hidden lg:flex ">
-          <Link className="btn btn-ghost bg  ">MyMarket</Link>
+          <Link className="  ">MyMarket</Link>
         </div>
 
         <div className="dropdown lg:hidden">
@@ -67,6 +67,15 @@ function Novabar() {
         <NavbarLinks />
       </ul>
       <li className="navbar-end ">
+        <h2 className=" mr-5 flex-col lg:flex hidden">
+          <span>{user.displayName}</span>{" "}
+          <span className=" text-sm"> Email : {user.email}</span>
+        </h2>
+        <div className="avatar">
+          <div className="w-12 rounded-full  mr-5">
+            <img src={user.photoURL} />
+          </div>
+        </div>
         <label onClick={darkMode} className="swap swap-rotate pr-6">
           {/* this hidden checkbox controls the state */}
           <input type="checkbox" />
@@ -89,13 +98,7 @@ function Novabar() {
             <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
           </svg>
         </label>
-        {user && <p className="w-20">{user.displayName}</p>}
-        <div className="avatar">
-          <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-            <img src={user.photoURL} />
-          </div>
-        </div>
-        <button onClick={handleLogout} className=" btn btn-ghost  ">
+        <button onClick={handleLogOut} className=" btn btn-ghost  ">
           Logout
         </button>
       </li>

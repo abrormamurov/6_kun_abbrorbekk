@@ -3,32 +3,41 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
+
+import { useContext, useEffect } from "react";
+import { GlobalContext } from "./context/useGlobal";
+//Layout
 import MainLayout from "./layout/MainLayout";
+//pages
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import SingleProduct from "./components/SingleProduct";
+//login
 import Login from "./pages/Login";
-
-// context
-import { useContext, useEffect } from "react";
-import { GlobalContext } from "./context/useGlobal";
-
-// components
-import ProtectedRoutes from "./components/ProtectedRoutes";
-
-import Signup from "./pages/Signup";
+import Singup from "./pages/Signup";
+//componetns
+import ProtectotRoots from "./components/ProtectedRoutes";
+import { action as SingupAction } from "./pages/Signup";
+import { action as LoginAction } from "./pages/Login";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase/firebaseConfig";
-function App() {
-  const { user, dispatch, authReady } = useContext(GlobalContext);
-  const router = createBrowserRouter([
+
+//firebase
+import auth, { db } from "./firebase/firebaseConfig";
+import { collection, getDocs } from "firebase/firestore";
+import Card from "./pages/Card";
+
+export default function App() {
+  let { user, dispetch, authReady } = useContext(GlobalContext);
+  localStorage.getItem(user) ? JSON.parse(localStorage.getItem(user)) : null;
+
+  let router = createBrowserRouter([
     {
       path: "/",
       element: (
-        <ProtectedRoutes user={user}>
-          <MainLayout />
-        </ProtectedRoutes>
+        <ProtectotRoots user={user}>
+          <MainLayout />,
+        </ProtectotRoots>
       ),
       children: [
         {
@@ -47,26 +56,44 @@ function App() {
           path: "/product/:id",
           element: <SingleProduct />,
         },
+        {
+          path: "/card",
+          element: <Card />,
+        },
       ],
     },
     {
-      path: "Login",
-      element: user ? <Navigate to="/" /> : <Login />,
+      path: "/signup",
+      element: user ? <Navigate to="/" /> : <Singup />,
+      action: SingupAction,
     },
     {
-      path: "Signup",
-      element: user ? <Navigate to="/" /> : <Signup />,
+      path: "/login",
+      element: user ? <Navigate to="/" /> : <Login />,
+      action: LoginAction,
     },
   ]);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      dispatch({ type: "LOG_IN", payload: user });
-
-      dispatch({ type: "AUTH_READY" });
+      dispetch({ type: "LOG_IN", paylod: user });
+      dispetch({ type: "AUTH_READY" });
     });
-  }, []);
+    let allData = [];
+    async function getData() {
+      const querySnapshot = await getDocs(collection(db, "products"));
+      // console.log({
+      //   ...querySnapshot.docs[0].data(),
+      //   idf: querySnapshot.docs[0].id,
+      // });
+      // console.log();
+      querySnapshot.docs.forEach((itme) => {
+        allData.push({ idF: itme.id, ...itme.data() });
+      });
+      dispetch({ type: "DATA_BASE", paylod: allData });
+    }
 
+    getData();
+  }, []);
   return <>{authReady && <RouterProvider router={router} />}</>;
 }
-export default App;
