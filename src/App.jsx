@@ -86,10 +86,11 @@ export default function App() {
       //   ...querySnapshot.docs[0].data(),
       //   idf: querySnapshot.docs[0].id,
       // });
-      // console.log();
       querySnapshot.docs.forEach((itme) => {
         allData.push({ idF: itme.id, ...itme.data() });
       });
+      // console.log(item);
+
       dispetch({ type: "DATA_BASE", paylod: allData });
     }
 
